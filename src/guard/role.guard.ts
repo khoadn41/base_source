@@ -8,7 +8,7 @@ import { UserService } from 'src/modules/user/user.service';
 export class RoleGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
-    private jwtService: JwtService, 
+    private jwtService: JwtService,
     private readonly userService: UserService,
   ) {}
 
@@ -34,6 +34,7 @@ export class RoleGuard implements CanActivate {
       let user = await this.jwtService.verify(token, {
         secret: process.env.JWT_SECRET,
       });
+      user = await this.userService.getOne({ _id: user._id });
       request.user = user;
       return roles.includes(user?.role) || roles.includes(Role.ALL);
     } catch (error) {

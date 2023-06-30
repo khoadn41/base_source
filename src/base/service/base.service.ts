@@ -23,6 +23,7 @@ export class BaseService<T> {
     const result = this.model.find({ ...filter });
     const total = await this.model.count(filter);
     const limit = options.limit || 10;
+    const page = options.page || 1;
     const skip = (options.page - 1) * limit || 0;
     const sortBys = (options?.sortBy || '').split(',');
     const sortDirections = (options?.sortDirection || '')
@@ -42,7 +43,15 @@ export class BaseService<T> {
         });
       }
     });
-    return { result: await result, total };
+    return {
+      result: await result,
+      pagination: {
+        total: total,
+        totalPage: Math.ceil(total / limit),
+        page: page,
+        limit: limit,
+      },
+    };
   }
 
   async getOne(filter: FilterQuery<T>, populate: Field = null) {
