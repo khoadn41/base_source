@@ -10,6 +10,7 @@ import { PassportModule } from '@nestjs/passport';
 import { DeviceModule } from './modules/device/device.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RoleGuard } from './guard/role.guard';
+import { EventModule } from './modules/event/event.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { RoleGuard } from './guard/role.guard';
     }),
     UserModule,
     DeviceModule,
+    EventModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: RoleGuard }],
